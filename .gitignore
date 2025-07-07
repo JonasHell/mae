@@ -2,3 +2,4 @@ __pycache__
 output_dir
 util/__pycache__
 .vscode
+*.png
