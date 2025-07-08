@@ -181,7 +181,7 @@ def main(args):
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
             transforms.ToTensor(),
-            DivideBy255(),
+            # DivideBy255(), to tensor already does this
         ]
     )
     # transform_train = transforms.Compose(
@@ -198,7 +198,18 @@ def main(args):
     # CHANGED
     # not using train subfolder
     # dataset_train = datasets.ImageFolder(os.path.join(args.data_path, 'train'), transform=transform_train)
-    dataset_train = datasets.ImageFolder(args.data_path, transform=transform_train)
+
+    # CHANGED
+    # different loader for greyscale images
+    def load_greyscale_image(path):
+        from PIL import Image
+
+        return Image.open(path)
+
+    dataset_train = datasets.ImageFolder(
+        args.data_path, transform=transform_train, loader=load_greyscale_image
+    )
+    # img = dataset_train[143][0]
     print(dataset_train)
 
     if True:  # args.distributed:

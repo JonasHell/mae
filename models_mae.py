@@ -324,6 +324,7 @@ def my_mae(**kwargs):
     model = MaskedAutoencoderViT(
         img_size=1248,
         patch_size=32,
+        in_chans=1,
         embed_dim=1280,
         depth=32,
         num_heads=16,
@@ -341,6 +342,7 @@ def my_small_mae(**kwargs):
     model = MaskedAutoencoderViT(
         img_size=1248,
         patch_size=32,
+        in_chans=1,
         embed_dim=512,
         depth=8,
         num_heads=8,
