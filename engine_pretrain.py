@@ -106,7 +106,7 @@ def train_one_epoch(
             )
             log_writer.add_image(
                 "train_images",
-                torchvision.transforms.functional.to_pil_image(grid),
+                grid,
                 epoch_1000x,
                 dataformats="CHW",
             )
