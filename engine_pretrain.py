@@ -97,7 +97,6 @@ def train_one_epoch(
             masked_imgs = model.unpatchify(masked_imgs)
             mixed_imgs = model.unpatchify(mixed_imgs)
             recon_imgs = model.unpatchify(pred[:n])
-            print(masked_imgs.shape, mixed_imgs.shape, recon_imgs.shape)
             grid = torchvision.utils.make_grid(
                 torch.cat([original_imgs, masked_imgs, mixed_imgs, recon_imgs], dim=0)
                 * 255,
