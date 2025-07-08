@@ -108,7 +108,7 @@ def train_one_epoch(
                 "train_images",
                 grid[0],  # grid is stacked RGB, extract greyscale again
                 epoch_1000x,
-                dataformats="CHW",
+                dataformats="HW",
             )
 
     # gather the stats from all processes
