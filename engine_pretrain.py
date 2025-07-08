@@ -106,7 +106,7 @@ def train_one_epoch(
             )
             log_writer.add_image(
                 "train_images",
-                grid,
+                grid[0],  # grid is stacked RGB, extract greyscale again
                 epoch_1000x,
                 dataformats="CHW",
             )
