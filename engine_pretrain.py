@@ -73,7 +73,7 @@ def train_one_epoch(
         if (data_iter_step + 1) % accum_iter == 0:
             optimizer.zero_grad()
 
-        torch.cuda.synchronize()
+        # torch.cuda.synchronize()
 
         metric_logger.update(loss=loss_value)
 
@@ -98,14 +98,15 @@ def train_one_epoch(
             mixed_imgs = model.unpatchify(mixed_imgs)
             recon_imgs = model.unpatchify(pred[:n])
             grid = torchvision.utils.make_grid(
-                torch.cat([original_imgs, masked_imgs, mixed_imgs, recon_imgs], dim=0)
-                * 255,
+                torch.cat([original_imgs, masked_imgs, mixed_imgs, recon_imgs], dim=0),
                 nrow=n,
                 padding=0,
+                normalize=True,
+                scale_each=True,
             )
             log_writer.add_image(
                 "train_images",
-                grid.to(torch.uint8),
+                torchvision.transforms.functional.to_pil_image(grid),
                 epoch_1000x,
                 dataformats="CHW",
             )
