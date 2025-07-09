@@ -93,7 +93,7 @@ def train_one_epoch(
             original_imgs = samples[:n]
             patched_imgs = model.patchify(original_imgs)
             masked_imgs = patched_imgs * (1 - mask[:n, :, None])
-            mixed_imgs = masked_imgs + pred * mask[:n, :, None]
+            mixed_imgs = masked_imgs + pred[:n] * mask[:n, :, None]
             masked_imgs = model.unpatchify(masked_imgs)
             mixed_imgs = model.unpatchify(mixed_imgs)
             recon_imgs = model.unpatchify(pred[:n])
