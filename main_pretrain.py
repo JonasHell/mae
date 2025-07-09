@@ -59,6 +59,10 @@ def get_args_parser():
     )
 
     parser.add_argument("--input_size", default=224, type=int, help="images input size")
+    # CHANGED: add in_chan argument
+    parser.add_argument(
+        "--in_chans", default=3, type=int, help="number of input channels"
+    )
 
     parser.add_argument(
         "--mask_ratio",
@@ -238,7 +242,9 @@ def main(args):
     )
 
     # define the model
-    model = models_mae.__dict__[args.model](norm_pix_loss=args.norm_pix_loss)
+    model = models_mae.__dict__[args.model](
+        norm_pix_loss=args.norm_pix_loss, in_chans=args.in_chans
+    )
 
     model.to(device)
 
