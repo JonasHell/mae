@@ -35,11 +35,15 @@ class MaskedAutoencoderViT(nn.Module):
         mlp_ratio=4.0,
         norm_layer=nn.LayerNorm,
         norm_pix_loss=False,
+        loss_on_all_patches=False,
     ):
         super().__init__()
         # CHANGED
         # needed for patchify if not 3 channels
         self.in_chans = in_chans
+        # CHANGED
+        # loss on all patches
+        self.loss_on_all_patches = loss_on_all_patches
         # --------------------------------------------------------------------------
         # MAE encoder specifics
         self.patch_embed = PatchEmbed(img_size, patch_size, in_chans, embed_dim)
@@ -264,7 +268,10 @@ class MaskedAutoencoderViT(nn.Module):
         loss = (pred - target) ** 2
         loss = loss.mean(dim=-1)  # [N, L], mean loss per patch
 
-        loss = (loss * mask).sum() / mask.sum()  # mean loss on removed patches
+        if self.loss_on_all_patches:
+            loss = loss.mean()
+        else:
+            loss = (loss * mask).sum() / mask.sum()  # mean loss on removed patches
         return loss
 
     def forward(self, imgs, mask_ratio=0.75):

@@ -72,6 +72,12 @@ def get_args_parser():
     )
 
     parser.add_argument(
+        "--loss_on_all_patches",
+        action="store_true",
+        help="Compute loss on all patches, not only on masked ones.",
+    )
+
+    parser.add_argument(
         "--norm_pix_loss",
         action="store_true",
         help="Use (per-patch) normalized pixels as targets for computing loss",
@@ -243,7 +249,9 @@ def main(args):
 
     # define the model
     model = my_models_mae.__dict__[args.model](
-        norm_pix_loss=args.norm_pix_loss, in_chans=args.in_chans
+        norm_pix_loss=args.norm_pix_loss,
+        in_chans=args.in_chans,
+        loss_on_all_patches=args.loss_on_all_patches,
     )
 
     model.to(device)
