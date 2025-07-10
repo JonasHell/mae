@@ -3,3 +3,4 @@ output_dir
 util/__pycache__
 .vscode
 *.png
+*.pth
