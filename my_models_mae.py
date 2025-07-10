@@ -329,6 +329,21 @@ def mae_vit_huge_patch14_dec512d8b(**kwargs):
     return model
 
 
+def mae_vit_base_flexpatch(**kwargs):
+    model = MaskedAutoencoderViT(
+        embed_dim=768,
+        depth=12,
+        num_heads=12,
+        decoder_embed_dim=512,
+        decoder_depth=8,
+        decoder_num_heads=16,
+        mlp_ratio=4,
+        norm_layer=partial(nn.LayerNorm, eps=1e-6),
+        **kwargs
+    )
+    return model
+
+
 def my_mae(**kwargs):
     model = MaskedAutoencoderViT(
         img_size=1248,
@@ -369,6 +384,8 @@ def my_small_mae(**kwargs):
 mae_vit_base_patch16 = mae_vit_base_patch16_dec512d8b  # decoder: 512 dim, 8 blocks
 mae_vit_large_patch16 = mae_vit_large_patch16_dec512d8b  # decoder: 512 dim, 8 blocks
 mae_vit_huge_patch14 = mae_vit_huge_patch14_dec512d8b  # decoder: 512 dim, 8 blocks
+
+mae_vit_base_flexpatch = mae_vit_base_flexpatch
 
 my_mae = my_mae
 my_small_mae = my_small_mae

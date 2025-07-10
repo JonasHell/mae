@@ -59,6 +59,8 @@ def get_args_parser():
     )
 
     parser.add_argument("--input_size", default=224, type=int, help="images input size")
+    # CHANGED: fleixbel patch size
+    parser.add_argument("--patch_size", default=16, type=int, help="Patch size")
     # CHANGED: add in_chan argument
     parser.add_argument(
         "--in_chans", default=3, type=int, help="number of input channels"
@@ -247,12 +249,21 @@ def main(args):
         drop_last=True,
     )
 
+    # CHANGED
     # define the model
-    model = my_models_mae.__dict__[args.model](
-        norm_pix_loss=args.norm_pix_loss,
-        in_chans=args.in_chans,
-        loss_on_all_patches=args.loss_on_all_patches,
-    )
+    if args.model == "mae_vit_base_flexpatch":
+        model = my_models_mae.__dict__[args.model](
+            norm_pix_loss=args.norm_pix_loss,
+            in_chans=args.in_chans,
+            loss_on_all_patches=args.loss_on_all_patches,
+            patch_size=args.patch_size,
+        )
+    else:
+        model = my_models_mae.__dict__[args.model](
+            norm_pix_loss=args.norm_pix_loss,
+            in_chans=args.in_chans,
+            loss_on_all_patches=args.loss_on_all_patches,
+        )
 
     model.to(device)
 
