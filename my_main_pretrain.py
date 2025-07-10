@@ -25,9 +25,9 @@ import torchvision.transforms as transforms
 from torch.utils.tensorboard import SummaryWriter
 
 assert timm.__version__ == "0.3.2"  # version check
-import models_mae
 import timm.optim.optim_factory as optim_factory
 
+import my_models_mae
 import util.misc as misc
 from my_engine_pretrain import train_one_epoch
 from util.misc import NativeScalerWithGradNormCount as NativeScaler
@@ -242,7 +242,7 @@ def main(args):
     )
 
     # define the model
-    model = models_mae.__dict__[args.model](
+    model = my_models_mae.__dict__[args.model](
         norm_pix_loss=args.norm_pix_loss, in_chans=args.in_chans
     )
 
