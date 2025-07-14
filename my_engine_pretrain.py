@@ -89,7 +89,7 @@ def train_one_epoch(
             log_writer.add_scalar("train_loss", loss_value_reduce, epoch_1000x)
             log_writer.add_scalar("lr", lr, epoch_1000x)
             # log images
-            n = 8
+            n = min(8, args.batch_size)
             original_imgs = samples[:n]
             patched_imgs = model.patchify(original_imgs)
             masked_imgs = patched_imgs * (1 - mask[:n, :, None])
