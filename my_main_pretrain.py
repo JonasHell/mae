@@ -154,7 +154,6 @@ def get_args_parser():
     parser.add_argument(
         "--standardize",
         action="store_true",
-        type=bool,
         help="Standardize images to 0 mean, 1 std. Default is False.",
     )
 
