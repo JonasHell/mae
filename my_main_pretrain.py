@@ -150,6 +150,13 @@ def get_args_parser():
     )
     parser.add_argument("--no_pin_mem", action="store_false", dest="pin_mem")
     parser.set_defaults(pin_mem=True)
+    # CHANGED: added standardize flag
+    parser.add_argument(
+        "--standardize",
+        action="store_true",
+        type=bool,
+        help="Standardize images to 0 mean, 1 std. Default is False.",
+    )
 
     # distributed training parameters
     parser.add_argument(
@@ -188,14 +195,25 @@ def main(args):
     # not cropping, different norm
     # simple augmentation
     # TODO: for now norm to 0, 1 - no mean std
-    transform_train = transforms.Compose(
-        [
-            transforms.RandomHorizontalFlip(),
-            transforms.RandomVerticalFlip(),
-            transforms.ToTensor(),
-            # DivideBy255(), to tensor already does this
-        ]
-    )
+    if args.standardize:
+        transform_train = transforms.Compose(
+            [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomVerticalFlip(),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=27.274872448979593, std=33.091206698483994),
+                # DivideBy255(), to tensor already does this
+            ]
+        )
+    else:
+        transform_train = transforms.Compose(
+            [
+                transforms.RandomHorizontalFlip(),
+                transforms.RandomVerticalFlip(),
+                transforms.ToTensor(),
+                # DivideBy255(), to tensor already does this
+            ]
+        )
     # transform_train = transforms.Compose(
     #     [
     #         transforms.RandomResizedCrop(
