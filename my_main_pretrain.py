@@ -201,7 +201,7 @@ def main(args):
                 transforms.RandomVerticalFlip(),
                 transforms.ToTensor(),
                 transforms.Normalize(
-                    mean=27.274872448979593 / 255, std=33.091206698483994 / 255
+                    mean=25.768387376434948 / 255, std=34.509317375955675 / 255
                 ),
                 # DivideBy255(), to tensor already does this
             ]
