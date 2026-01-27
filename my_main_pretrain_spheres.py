@@ -74,6 +74,14 @@ def get_args_parser():
         help="Compute loss on all patches, not only on masked ones.",
     )
 
+    # CHANGED: add loss_on_all_patches argument
+    parser.add_argument(
+        "--pos_encode_w",
+        type=float,
+        default=1.0,
+        help="Weight for position encoding.",
+    )
+
     parser.add_argument(
         "--mask_ratio",
         default=0.75,
@@ -235,6 +243,7 @@ def main(args):
         norm_pix_loss=args.norm_pix_loss,
         in_chans=args.in_chans,
         loss_on_all_patches=args.loss_on_all_patches,
+        pos_encode_w=args.pos_encode_w,
     )
 
     model.to(device)

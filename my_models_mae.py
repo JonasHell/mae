@@ -36,6 +36,7 @@ class MaskedAutoencoderViT(nn.Module):
         norm_layer=nn.LayerNorm,
         norm_pix_loss=False,
         loss_on_all_patches=False,
+        pos_encode_w: float = 1.0,
     ):
         super().__init__()
         # CHANGED
@@ -44,6 +45,9 @@ class MaskedAutoencoderViT(nn.Module):
         # CHANGED
         # loss on all patches
         self.loss_on_all_patches = loss_on_all_patches
+        # CHANGED
+        # position encoding weight
+        self.pos_encode_w = pos_encode_w
         # --------------------------------------------------------------------------
         # MAE encoder specifics
         self.patch_embed = PatchEmbed(img_size, patch_size, in_chans, embed_dim)
@@ -206,7 +210,7 @@ class MaskedAutoencoderViT(nn.Module):
         x = self.patch_embed(x)
 
         # add pos embed w/o cls token
-        x = x + self.pos_embed[:, 1:, :]
+        x = x + self.pos_embed[:, 1:, :] * self.pos_encode_w
 
         # masking: length -> length * mask_ratio
         x, mask, ids_restore = self.random_masking(x, mask_ratio)
