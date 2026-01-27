@@ -192,12 +192,12 @@ def main(args):
     # simple augmentation
     transform_train = transforms.Compose(
         [
-            # transforms.RandomResizedCrop(
-            #     args.input_size, scale=(0.2, 1.0), interpolation=3
-            # ),  # 3 is bicubic
+            transforms.RandomResizedCrop(
+                args.input_size, scale=(0.2, 1.0), interpolation=3
+            ),  # 3 is bicubic
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
-            # transforms.Normalize(mean=0.17597473, std=0.23851053),
+            transforms.Normalize(mean=0.17597473, std=0.23851053),
         ]
     )
 
