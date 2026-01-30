@@ -111,6 +111,53 @@ def train_one_epoch(
                 dataformats="HW",
             )
 
+            # log difference of unmasked patches
+            patched_imgs = model.patchify(samples)
+            unmasked_patches = pred[mask == 0].reshape(-1, 16, 16)
+
+            random_subset = torch.randperm(
+                unmasked_patches.shape[0], device=unmasked_patches.device
+            )[: n * n]
+            unmasked_patches_subset = unmasked_patches[random_subset]
+            unmasked_patches_grid = torchvision.utils.make_grid(
+                unmasked_patches_subset[:, None],
+                nrow=n,
+                padding=2,
+                normalize=True,
+                scale_each=True,
+            )
+            log_writer.add_image(
+                "unmasked_patches_recon",
+                unmasked_patches_grid[
+                    0
+                ],  # grid is stacked RGB, extract greyscale again
+                epoch_1000x,
+                dataformats="HW",
+            )
+
+            unmasked_patches_mean = unmasked_patches.mean(dim=0)
+            unmasked_patches_std = unmasked_patches.std(dim=0)
+            log_writer.add_image(
+                "unmasked_patches_mean",
+                unmasked_patches_mean,
+                epoch_1000x,
+                dataformats="HW",
+            )
+            log_writer.add_image(
+                "unmasked_patches_std",
+                unmasked_patches_std,
+                epoch_1000x,
+                dataformats="HW",
+            )
+
+            log_writer.add_scalar(
+                "max_diff_pixel_of_unmasked_patches",
+                torch.abs(
+                    (unmasked_patches - unmasked_patches.mean(dim=0, keepdim=True))
+                ).max(),
+                epoch_1000x,
+            )
+
     # gather the stats from all processes
     metric_logger.synchronize_between_processes()
     print("Averaged stats:", metric_logger)
