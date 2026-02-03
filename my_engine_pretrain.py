@@ -114,14 +114,26 @@ def train_one_epoch(
             # log difference of unmasked patches
             patched_imgs = model.patchify(samples)
             unmasked_patches = pred[mask == 0].reshape(-1, 16, 16)
+            unmasked_patches1 = pred[0][mask[0] == 0].reshape(-1, 16, 16)
+            unmasked_patches2 = pred[1][mask[1] == 0].reshape(-1, 16, 16)
 
-            random_subset = torch.randperm(
-                unmasked_patches.shape[0], device=unmasked_patches.device
-            )[: n * n]
-            unmasked_patches_subset = unmasked_patches[random_subset]
+            random_subset1 = torch.randperm(
+                unmasked_patches1.shape[0], device=unmasked_patches1.device
+            )[:25]
+            random_subset2 = torch.randperm(
+                unmasked_patches2.shape[0], device=unmasked_patches2.device
+            )[:25]
+            unmasked_patches_subset1 = unmasked_patches1[random_subset1]
+            unmasked_patches_subset2 = unmasked_patches2[random_subset2]
             unmasked_patches_grid = torchvision.utils.make_grid(
-                unmasked_patches_subset[:, None],
-                nrow=n,
+                torch.cat(
+                    [
+                        unmasked_patches_subset1[:, None],
+                        unmasked_patches_subset2[:, None],
+                    ],
+                    dim=0,
+                ),
+                nrow=5,
                 padding=2,
                 normalize=True,
                 scale_each=True,
@@ -129,6 +141,27 @@ def train_one_epoch(
             log_writer.add_image(
                 "unmasked_patches_recon",
                 unmasked_patches_grid[
+                    0
+                ],  # grid is stacked RGB, extract greyscale again
+                epoch_1000x,
+                dataformats="HW",
+            )
+            unmasked_patches_grid_scaleTog = torchvision.utils.make_grid(
+                torch.cat(
+                    [
+                        unmasked_patches_subset1[:, None],
+                        unmasked_patches_subset2[:, None],
+                    ],
+                    dim=0,
+                ),
+                nrow=5,
+                padding=2,
+                normalize=True,
+                scale_each=False,
+            )
+            log_writer.add_image(
+                "unmasked_patches_recon_scaleTog",
+                unmasked_patches_grid_scaleTog[
                     0
                 ],  # grid is stacked RGB, extract greyscale again
                 epoch_1000x,
